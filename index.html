@@ -287,6 +287,16 @@
             </div>
           </div>
           <div>
+            <label for="inputStorePin" class="block text-xs font-extrabold uppercase tracking-wider muted-text mb-1.5">PIN Rahasia Toko (4–6 angka untuk Daftar / Edit Toko)</label>
+            <div class="flex items-center gap-2">
+              <input id="inputStorePin" type="password" inputmode="numeric" maxlength="12" placeholder="Buat PIN (misal: 123456)" class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-500/5 border border-slate-500/20 text-sm font-bold focus:outline-none focus:border-blue-600" />
+              <button id="btnCloudLoadStore" type="button" class="px-3 py-2.5 rounded-xl text-xs font-bold bg-slate-500/10 hover:bg-slate-500/20 border border-slate-500/20 whitespace-nowrap transition" title="Ambil data toko lama kamu dari server">
+                Masuk Toko Lama
+              </button>
+            </div>
+            <p class="text-[11px] muted-text mt-1">Simpan PIN ini! Dipakai kalau kamu mau mengubah harga/nama toko kamu nanti.</p>
+          </div>
+          <div>
             <label for="inputWaNumber" class="block text-xs font-extrabold uppercase tracking-wider muted-text mb-1.5">Nomor WhatsApp Admin / Reseller</label>
             <input id="inputWaNumber" type="text" placeholder="Contoh: 081234567890" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-500/5 border border-slate-500/20 text-sm font-bold focus:outline-none focus:border-blue-600" />
             <p class="text-[11px] muted-text mt-1">Semua pesanan pembeli akan langsung dikirim ke nomor WhatsApp ini.</p>
@@ -358,12 +368,15 @@
             <h3 class="text-base sm:text-lg font-extrabold">Bagikan Link Toko Reseller Kamu</h3>
             <p class="text-xs text-slate-300">Format ringkas dan bersih! Saat pembeli membuka link ini, tema, nama toko, produk, dan WA langsung pakai punyamu.</p>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button id="btnCloudSaveStore" type="button" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow transition">
+              Daftar &amp; Simpan Online
+            </button>
             <button id="btnCopyShareLink" type="button" class="px-4 py-2.5 rounded-xl text-xs font-extrabold sapphire-pill text-white shadow transition">
-              Salin Link Toko Pembeli
+              Salin Link Pendek
             </button>
             <button id="btnCopyBroadcastText" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-extrabold bg-white/10 hover:bg-white/20 text-white border border-white/15 transition">
-              Salin Teks Promosi WA
+              Salin Teks WA
             </button>
           </div>
         </div>
@@ -768,6 +781,73 @@
       addedApps: []
     };
 
+    const SUPABASE_URL = "https://ezrxywboafrlbqbeofvl.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Vk3OZ06aLX3Ss2ehvBf32w_UuBtdYmo";
+
+    async function cloudFetchStore(slug) {
+      const clean = String(slug || "").toLowerCase().replace(/[^a-z0-9-_]/g, "");
+      if (!clean) return null;
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/reseller_stores?slug=eq.${encodeURIComponent(clean)}&select=slug,pin,config`,
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+        if (!res.ok) return null;
+        const rows = await res.json();
+        return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function cloudSaveStore(slug, pin, configObj) {
+      const clean = String(slug || "").toLowerCase().replace(/[^a-z0-9-_]/g, "");
+      if (!clean || !pin) return { ok: false, msg: "Isi Username Link dan PIN Toko dulu ya!" };
+      try {
+        const existing = await cloudFetchStore(clean);
+        if (existing) {
+          if (String(existing.pin) !== String(pin)) {
+            return { ok: false, msg: `Username "${clean}" sudah dipakai! Masukkan PIN yang benar untuk edit, atau pilih username lain.` };
+          }
+          const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/reseller_stores?slug=eq.${encodeURIComponent(clean)}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                apikey: SUPABASE_KEY,
+                Authorization: `Bearer ${SUPABASE_KEY}`,
+                Prefer: "return=minimal"
+              },
+              body: JSON.stringify({ config: configObj, updated_at: new Date().toISOString() })
+            }
+          );
+          if (!res.ok) return { ok: false, msg: "Gagal update toko ke server. Coba lagi sebentar." };
+          return { ok: true, msg: `Toko "${clean}" berhasil di-update! Link: https://tokokubos.my.id/?r=${clean}` };
+        } else {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/reseller_stores`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`,
+              Prefer: "return=minimal"
+            },
+            body: JSON.stringify({ slug: clean, pin: String(pin), config: configObj })
+          });
+          if (!res.ok) return { ok: false, msg: "Gagal mendaftar toko baru. Coba lagi sebentar." };
+          return { ok: true, msg: `Berhasil daftar! Link tokomu sekarang: https://tokokubos.my.id/?r=${clean}` };
+        }
+      } catch (e) {
+        return { ok: false, msg: "Koneksi ke server database gagal. Cek internet kamu ya." };
+      }
+    }
+
     let state = {
       config: JSON.parse(JSON.stringify(DEFAULT_CONFIG)),
       activeTab: "storefront",
@@ -779,7 +859,8 @@
       selectedPlanByApp: {},
       cart: [],
       logoTapCount: 0,
-      logoTapTimer: null
+      logoTapTimer: null,
+      cloudRegisteredSlug: ""
     };
 
     function getActiveCatalog() {
@@ -948,7 +1029,7 @@
       const slug = getCleanSlug();
       const cleanName = (state.config.storeName || "").trim() || DEFAULT_CONFIG.storeName;
       const cleanWa = (state.config.waNumber || "").trim() || DEFAULT_CONFIG.waNumber;
-      if (REGISTERED_RESELLERS[slug]) {
+      if (REGISTERED_RESELLERS[slug] || (state.cloudRegisteredSlug && state.cloudRegisteredSlug === slug)) {
         return `${base}?r=${encodeURIComponent(slug)}`;
       }
       const extras = [];
@@ -1709,6 +1790,83 @@
         showToast("Pengaturan dikembalikan ke default MTStore");
       });
 
+      document.getElementById("btnCloudSaveStore").addEventListener("click", async () => {
+        const btn = document.getElementById("btnCloudSaveStore");
+        const slug = getCleanSlug();
+        const pin = (document.getElementById("inputStorePin").value || "").trim();
+        if (!slug) {
+          showToast("Isi Username Link Toko dulu ya!");
+          return;
+        }
+        if (pin.length < 4) {
+          showToast("Buat PIN rahasia minimal 4 angka/huruf ya!");
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = "Menyimpan...";
+        const cleanCfg = {
+          ...state.config,
+          storeName: (state.config.storeName || "").trim() || DEFAULT_CONFIG.storeName,
+          waNumber: (state.config.waNumber || "").trim() || DEFAULT_CONFIG.waNumber,
+          storeTagline: (state.config.storeTagline || "").trim() || DEFAULT_CONFIG.storeTagline,
+          opHours: (state.config.opHours || "").trim() || DEFAULT_CONFIG.opHours,
+          storeSlug: slug
+        };
+        const result = await cloudSaveStore(slug, pin, cleanCfg);
+        btn.disabled = false;
+        btn.textContent = "Daftar & Simpan Online";
+        if (result.ok) {
+          state.cloudRegisteredSlug = slug;
+          state.config.storeSlug = slug;
+          saveConfigToStorage();
+          document.getElementById("inputStoreSlug").value = slug;
+          document.getElementById("inputGeneratedShareUrl").value = buildShareableBuyerUrl();
+          showToast(result.msg);
+        } else {
+          showToast(result.msg);
+        }
+      });
+
+      document.getElementById("btnCloudLoadStore").addEventListener("click", async () => {
+        const slug = getCleanSlug();
+        const pin = (document.getElementById("inputStorePin").value || "").trim();
+        if (!slug || !pin) {
+          showToast("Masukkan Username Link dan PIN tokomu untuk masuk!");
+          return;
+        }
+        showToast("Memuat data toko...");
+        const row = await cloudFetchStore(slug);
+        if (!row) {
+          showToast(`Username "${slug}" belum terdaftar.`);
+          return;
+        }
+        if (String(row.pin) !== String(pin)) {
+          showToast("PIN salah! Coba periksa kembali PIN tokomu.");
+          return;
+        }
+        state.config = {
+          ...DEFAULT_CONFIG,
+          ...(row.config || {}),
+          storeSlug: slug,
+          customPrices: (row.config && row.config.customPrices) || {},
+          hiddenAppIds: (row.config && row.config.hiddenAppIds) || [],
+          addedApps: (row.config && row.config.addedApps) || []
+        };
+        state.cloudRegisteredSlug = slug;
+        saveConfigToStorage();
+        getActiveCatalog().forEach((app) => {
+          if (!state.selectedPlanByApp[app.id]) state.selectedPlanByApp[app.id] = app.plans[0].id;
+        });
+        renderHeaderAndHero();
+        renderThemeSelector();
+        renderCategoryPills();
+        renderCatalogGrid();
+        renderSettingsForm();
+        renderPricingTable();
+        renderCartUI();
+        showToast(`Berhasil masuk ke toko "${state.config.storeName}"!`);
+      });
+
       document.getElementById("btnCopyShareLink").addEventListener("click", () => {
         copyTextToClipboard(buildShareableBuyerUrl(), "Link pendek Toko Pembeli berhasil disalin!");
       });
@@ -1819,20 +1977,40 @@
       });
     }
 
-    // Boot Application
-    loadConfigFromUrlOrStorage();
-    getActiveCatalog().forEach((app) => {
-      state.selectedPlanByApp[app.id] = app.plans[0].id;
-    });
-    bindAllEvents();
-    renderHeaderAndHero();
-    renderTabs();
-    renderThemeSelector();
-    renderCategoryPills();
-    renderCatalogGrid();
-    renderSettingsForm();
-    renderPricingTable();
-    renderCartUI();
+    // Boot Application (with automatic Supabase cloud lookup for ?r=namatoko)
+    async function bootApp() {
+      loadConfigFromUrlOrStorage();
+      const params = new URLSearchParams(window.location.search);
+      const rSlug = (params.get("r") || "").toLowerCase().trim();
+      if (rSlug) {
+        const cloudRow = await cloudFetchStore(rSlug);
+        if (cloudRow && cloudRow.config) {
+          state.config = {
+            ...DEFAULT_CONFIG,
+            ...cloudRow.config,
+            storeSlug: rSlug,
+            customPrices: cloudRow.config.customPrices || {},
+            hiddenAppIds: cloudRow.config.hiddenAppIds || [],
+            addedApps: cloudRow.config.addedApps || []
+          };
+          state.cloudRegisteredSlug = rSlug;
+          state.buyerSimulation = true;
+        }
+      }
+      getActiveCatalog().forEach((app) => {
+        state.selectedPlanByApp[app.id] = app.plans[0].id;
+      });
+      bindAllEvents();
+      renderHeaderAndHero();
+      renderTabs();
+      renderThemeSelector();
+      renderCategoryPills();
+      renderCatalogGrid();
+      renderSettingsForm();
+      renderPricingTable();
+      renderCartUI();
+    }
+    bootApp();
   </script>
 </body>
 </html>
