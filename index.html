@@ -784,18 +784,21 @@
     const SUPABASE_URL = "https://ezrxywboafrlbqbeofvl.supabase.co";
     const SUPABASE_KEY = "sb_publishable_Vk3OZ06aLX3Ss2ehvBf32w_UuBtdYmo";
 
+    function getSupabaseHeaders(extra = {}) {
+      const h = { apikey: SUPABASE_KEY, ...extra };
+      if (SUPABASE_KEY.startsWith("eyJ")) {
+        h.Authorization = `Bearer ${SUPABASE_KEY}`;
+      }
+      return h;
+    }
+
     async function cloudFetchStore(slug) {
       const clean = String(slug || "").toLowerCase().replace(/[^a-z0-9-_]/g, "");
       if (!clean) return null;
       try {
         const res = await fetch(
           `${SUPABASE_URL}/rest/v1/reseller_stores?slug=eq.${encodeURIComponent(clean)}&select=slug,pin,config`,
-          {
-            headers: {
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${SUPABASE_KEY}`
-            }
-          }
+          { headers: getSupabaseHeaders() }
         );
         if (!res.ok) return null;
         const rows = await res.json();
@@ -818,29 +821,25 @@
             `${SUPABASE_URL}/rest/v1/reseller_stores?slug=eq.${encodeURIComponent(clean)}`,
             {
               method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                apikey: SUPABASE_KEY,
-                Authorization: `Bearer ${SUPABASE_KEY}`,
-                Prefer: "return=minimal"
-              },
+              headers: getSupabaseHeaders({ "Content-Type": "application/json", Prefer: "return=minimal" }),
               body: JSON.stringify({ config: configObj, updated_at: new Date().toISOString() })
             }
           );
-          if (!res.ok) return { ok: false, msg: "Gagal update toko ke server. Coba lagi sebentar." };
+          if (!res.ok) {
+            const errTxt = await res.text().catch(() => "");
+            return { ok: false, msg: `Gagal update (${res.status}): ${errTxt.slice(0, 80) || "Cek izin tabel"}` };
+          }
           return { ok: true, msg: `Toko "${clean}" berhasil di-update! Link: https://tokokubos.my.id/?r=${clean}` };
         } else {
           const res = await fetch(`${SUPABASE_URL}/rest/v1/reseller_stores`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${SUPABASE_KEY}`,
-              Prefer: "return=minimal"
-            },
+            headers: getSupabaseHeaders({ "Content-Type": "application/json", Prefer: "return=minimal" }),
             body: JSON.stringify({ slug: clean, pin: String(pin), config: configObj })
           });
-          if (!res.ok) return { ok: false, msg: "Gagal mendaftar toko baru. Coba lagi sebentar." };
+          if (!res.ok) {
+            const errTxt = await res.text().catch(() => "");
+            return { ok: false, msg: `Gagal daftar (${res.status}): ${errTxt.slice(0, 80) || "Cek izin tabel"}` };
+          }
           return { ok: true, msg: `Berhasil daftar! Link tokomu sekarang: https://tokokubos.my.id/?r=${clean}` };
         }
       } catch (e) {
