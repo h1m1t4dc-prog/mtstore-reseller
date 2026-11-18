@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MTStore Reseller Studio &amp; Katalog Digital Premium</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --porcelain-bg: #F4F7FE;
+      --porcelain-card: #FFFFFF;
+      --sapphire-primary: #1D63FF;
+      --sapphire-dark: #1344B8;
+      --sapphire-soft: #EBF2FF;
+      --obsidian-ink: #0B1120;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background:
+        radial-gradient(circle at 12% 0%, rgba(29, 99, 255, 0.10) 0%, transparent 42%),
+        radial-gradient(circle at 88% 8%, rgba(59, 130, 246, 0.09) 0%, transparent 40%),
+        linear-gradient(180deg, #F7FAFF 0%, #EEF3FC 100%);
+      color: var(--obsidian-ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .porcelain-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F9FBFF 100%);
+      border: 1.5px solid rgba(29, 99, 255, 0.12);
+      box-shadow:
+        0 14px 32px -12px rgba(19, 68, 184, 0.10),
+        0 2px 6px rgba(15, 23, 42, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .porcelain-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(29, 99, 255, 0.32);
+      box-shadow:
+        0 20px 38px -12px rgba(29, 99, 255, 0.16),
+        0 4px 10px rgba(15, 23, 42, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
+    .sapphire-pill {
+      background: linear-gradient(135deg, #2563EB 0%, #1746B8 100%);
+      box-shadow:
+        0 10px 22px -6px rgba(29, 99, 255, 0.48),
+        inset 0 1px 1px rgba(255, 255, 255, 0.32);
+    }
+    .sapphire-pill:hover {
+      background: linear-gradient(135deg, #1D4ED8 0%, #133999 100%);
+    }
+    .obsidian-banner {
+      background:
+        radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.36) 0%, transparent 55%),
+        radial-gradient(circle at 15% 90%, rgba(59, 130, 246, 0.26) 0%, transparent 50%),
+        linear-gradient(145deg, #070B16 0%, #0F172A 100%);
+      border: 1.5px solid rgba(96, 165, 250, 0.24);
+      box-shadow: 0 22px 45px -16px rgba(11, 17, 32, 0.45);
+    }
+    .plan-chip {
+      transition: all 0.16s ease;
+    }
+    .plan-chip-active {
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      border-color: #2563EB;
+      color: #1E40AF;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.14);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="pb-28">
+
+  <!-- TOP RESELLER STUDIO CONTROL BAR (Hidden automatically when Buyer Link ?mode=buyer or locked) -->
+  <div id="studioTopBar" class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-md border-b border-blue-500/25 text-white px-3 sm:px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold tracking-wide bg-blue-600/25 text-blue-300 border border-blue-400/30">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+          PANEL RESELLER MTSTORE
+        </span>
+        <span class="text-xs text-slate-300 hidden md:inline">Atur nama toko, nomor WA, &amp; markup harga lalu bagikan link ke pembeli.</span>
+      </div>
+      <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar">
+        <button id="tabBtnStorefront" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-blue-600 text-white shadow-sm">
+          1. Katalog Pembeli
+        </button>
+        <button id="tabBtnSettings" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800 text-slate-200 hover:bg-slate-700">
+          2. Pengaturan Toko &amp; Link
+        </button>
+        <button id="tabBtnPricing" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800 text-slate-200 hover:bg-slate-700">
+          3. Atur Harga per APK (42)
+        </button>
+        <button id="btnSimulateBuyer" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-600/30" title="Sembunyikan bar reseller untuk melihat tampilan murni pembeli">
+          Simulasi Pembeli
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN HEADER / STOREFRONT NAVBAR -->
+  <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-xl border-b border-blue-100/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+      <!-- Store Brand (Tap 5x to toggle Reseller Studio if in Buyer Simulation mode) -->
+      <div id="brandLogoTrigger" class="flex items-center gap-3 cursor-pointer select-none" title="Ketuk 5x untuk membuka Panel Reseller">
+        <div id="storeInitialsBox" class="w-11 h-11 rounded-2xl sapphire-pill flex items-center justify-center text-white font-extrabold text-lg tracking-tight shrink-0">
+          MT
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="headerStoreName" class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight leading-tight">
+              MTStore Digital Premium
+            </h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
+              VERIFIED
+            </span>
+          </div>
+          <p id="headerStoreTagline" class="text-xs text-slate-500 font-medium line-clamp-1">
+            Katalog Aplikasi Premium Bergaransi &bull; Aktivasi Cepat via WhatsApp
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Actions: WA Admin & Cart Button -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="btnDirectWaHeader" type="button" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200/80 transition">
+          <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.08-1.13.11-1.83-.11-.42-.13-.97-.31-1.67-.61-2.94-1.27-4.86-4.25-5.01-4.45-.15-.2-1.2-1.59-1.2-3.04 0-1.45.76-2.16 1.03-2.45.27-.29.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.82 2.01.89 2.16.07.15.12.32.02.52-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.61.17.29.76 1.26 1.64 2.04 1.13 1.01 2.08 1.32 2.38 1.47.29.15.46.12.64-.07.17-.2.74-.86.94-1.15.2-.29.39-.25.66-.15.27.1 1.72.81 2.01.96.29.15.49.22.56.34.08.12.08.71-.16 1.39z"/></svg>
+          <span id="headerWaDisplay">0877-9233-8250</span>
+        </button>
+
+        <button id="btnOpenCart" type="button" class="relative inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-extrabold text-white sapphire-pill transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5.6A1 1 0 006.6 20h10.8a1 1 0 001-.8L20 13M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+          </svg>
+          <span>Invoice</span>
+          <span id="cartCountBadge" class="px-2 py-0.5 rounded-full text-[11px] font-black bg-white text-blue-700">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: BUYER STOREFRONT CATALOG (DEFAULT)                            -->
+  <!-- ===================================================================== -->
+  <main id="viewStorefront" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
+
+    <!-- Hero Banner (Obsidian & Royal Sapphire 3D Porcelain) -->
+    <section class="obsidian-banner rounded-3xl p-5 sm:p-8 text-white relative overflow-hidden">
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div class="lg:col-span-8 space-y-3">
+          <div class="inline-flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
+              42 Aplikasi Resmi
+            </span>
+            <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              QRIS All Payment &bull; Full Garansi
+            </span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Aplikasi Premium Harga Hemat di <span id="heroStoreName" class="text-blue-400">MTStore Digital Premium</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+            Pilih paket aplikasi favoritmu, tambahkan ke invoice, lalu kirim pesanan otomatis ke WhatsApp admin kami. Proses cepat, legal, dan bergaransi sesuai ketentuan.
+          </p>
+          <div class="pt-1 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+            <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+              <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 6v6l4 2"/></svg>
+              <span id="heroOpHours">Selasa–Minggu 08.00–22.00 WIB (Senin Libur)</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>WhatsApp Resmi: <strong id="heroWaNumber" class="text-white">0877-9233-8250</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Step Order Card -->
+        <div class="lg:col-span-4 bg-white/5 backdrop-blur-md border border-white/15 rounded-2xl p-4 space-y-2.5">
+          <div class="text-xs font-extrabold uppercase tracking-wider text-blue-300">Cara Order Cepat</div>
+          <div class="flex items-start gap-2.5 text-xs">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-black flex items-center justify-center shrink-0 mt-0.5">1</span>
+            <div><strong class="text-white">Pilih Paket APK:</strong> Klik varian durasi pada kartu aplikasi lalu masukkan ke Invoice.</div>
+          </div>
+          <div class="flex items-start gap-2.5 text-xs">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-black flex items-center justify-center shrink-0 mt-0.5">2</span>
+            <div><strong class="text-white">Kirim ke WhatsApp:</strong> Klik tombol Checkout untuk mengirim rincian otomatis ke WA.</div>
+          </div>
+          <div class="flex items-start gap-2.5 text-xs">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white font-black flex items-center justify-center shrink-0 mt-0.5">3</span>
+            <div><strong class="text-white">Bayar QRIS &amp; Aktif:</strong> Selesaikan pembayaran QRIS dan akun langsung dikirim di chat.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Category Filter Bar -->
+    <section class="porcelain-card rounded-2xl p-3.5 sm:p-4 space-y-3">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input id="searchCatalogInput" type="text" placeholder="Cari aplikasi (Netflix, Canva, CapCut, ChatGPT, Spotify, Vidio...)" class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition" />
+          <button id="btnClearSearch" type="button" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold">✕</button>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-2 text-xs text-slate-500 font-semibold">
+          <span>Menampilkan <strong id="shownAppCount" class="text-blue-700">42</strong> aplikasi</span>
+          <select id="sortCatalogSelect" class="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 focus:outline-none focus:border-blue-600">
+            <option value="az">Urutkan: Nama A–Z</option>
+            <option value="cheapest">Urutkan: Harga Termurah</option>
+            <option value="popular">Urutkan: Paling Populer</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Pills -->
+      <div id="categoryFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-0.5"></div>
+    </section>
+
+    <!-- Catalog Grid -->
+    <section id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: RESELLER STORE CONFIG & SHAREABLE LINK GENERATOR              -->
+  <!-- ===================================================================== -->
+  <section id="viewSettings" class="hidden max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+    <div class="porcelain-card rounded-3xl p-5 sm:p-7 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-blue-600">Pengaturan Reseller</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Identitas Toko, Nomor WA &amp; Markup Harga</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Ubah nama tokomu, nomor WhatsApp tujuan order, dan tentukan kenaikan harga otomatis.</p>
+        </div>
+        <button id="btnResetDefaultConfig" type="button" class="self-start sm:self-auto px-3.5 py-2 rounded-xl text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition">
+          Reset ke Default MTStore
+        </button>
+      </div>
+
+      <!-- Form Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Store Identity -->
+        <div class="space-y-4">
+          <div>
+            <label for="inputStoreName" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">Nama Toko Reseller</label>
+            <input id="inputStoreName" type="text" placeholder="Contoh: Raka Digital Store" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="inputWaNumber" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">Nomor WhatsApp Admin / Reseller</label>
+            <input id="inputWaNumber" type="text" placeholder="Contoh: 0812-3456-7890 atau 6281234567890" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600" />
+            <p class="text-[11px] text-slate-500 mt-1">Semua pesanan pembeli akan langsung dikirim ke nomor WhatsApp ini.</p>
+          </div>
+          <div>
+            <label for="inputStoreTagline" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">Slogan / Tagline Toko</label>
+            <input id="inputStoreTagline" type="text" placeholder="Katalog Aplikasi Premium Bergaransi • Aktivasi Cepat" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 focus:outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="inputOpHours" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">Jam Operasional Toko</label>
+            <input id="inputOpHours" type="text" placeholder="Setiap Hari 08.00–22.00 WIB" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 focus:outline-none focus:border-blue-600" />
+          </div>
+        </div>
+
+        <!-- Global Markup Engine -->
+        <div class="bg-blue-50/60 border border-blue-200/80 rounded-2xl p-4 sm:p-5 space-y-4">
+          <div>
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-blue-700">Kalkulator Profit Otomatis</span>
+            <h3 class="text-base font-extrabold text-slate-900">Naikkan Harga Semua Produk Sekaligus</h3>
+            <p class="text-xs text-slate-600">Pilih mau naik harga rata dalam Rupiah (misal +Rp2.000/item) atau Persentase (%).</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button id="btnMarkupModeFlat" type="button" class="px-3 py-2.5 rounded-xl text-xs font-extrabold border transition bg-blue-600 text-white border-blue-600">
+              + Nominal Rupiah (Rp)
+            </button>
+            <button id="btnMarkupModePercent" type="button" class="px-3 py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-200">
+              + Persentase (%)
+            </button>
+          </div>
+
+          <div>
+            <label id="labelMarkupValue" for="inputMarkupValue" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Nominal Kenaikan Harga per Paket (Rp)
+            </label>
+            <input id="inputMarkupValue" type="number" min="0" step="500" value="0" class="w-full px-3.5 py-2.5 rounded-xl border border-blue-300 bg-white text-base font-black text-blue-700 focus:outline-none focus:border-blue-600" />
+          </div>
+
+          <!-- Quick Markup Presets -->
+          <div>
+            <div class="text-[11px] font-bold text-slate-500 mb-1.5">Pilihan Cepat Markup:</div>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" data-preset-mode="flat" data-preset-val="0" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-slate-700">Harga Modal (+Rp0)</button>
+              <button type="button" data-preset-mode="flat" data-preset-val="1000" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-blue-700">+Rp1.000</button>
+              <button type="button" data-preset-mode="flat" data-preset-val="2000" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-blue-700">+Rp2.000</button>
+              <button type="button" data-preset-mode="flat" data-preset-val="3000" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-blue-700">+Rp3.000</button>
+              <button type="button" data-preset-mode="flat" data-preset-val="5000" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-blue-700">+Rp5.000</button>
+              <button type="button" data-preset-mode="percent" data-preset-val="15" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-indigo-700">+15%</button>
+              <button type="button" data-preset-mode="percent" data-preset-val="25" class="preset-markup-btn px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 hover:border-blue-500 text-indigo-700">+25%</button>
+            </div>
+          </div>
+
+          <div>
+            <label for="selectRounding" class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">Pembulatan Harga Otomatis</label>
+            <select id="selectRounding" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-800">
+              <option value="0">Tanpa Pembulatan (Sesuai Angka)</option>
+              <option value="500">Bulatkan ke Atas Rp500 Terdekat</option>
+              <option value="1000">Bulatkan ke Atas Rp1.000 Terdekat</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shareable Link Output Box -->
+      <div class="obsidian-banner rounded-2xl p-5 text-white space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-400">Link Khusus Pembeli (Tanpa Panel Reseller)</span>
+            <h3 class="text-base sm:text-lg font-extrabold">Bagikan Link Toko Reseller Kamu</h3>
+            <p class="text-xs text-slate-300">Saat pembeli membuka link ini, mereka langsung melihat nama tokomu, harga yang sudah dinaikkan, dan tombol order ke nomor WA-mu (tanpa tahu harga modal MTStore).</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="btnCopyShareLink" type="button" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-blue-600 hover:bg-blue-500 text-white shadow transition">
+              Salin Link Toko Pembeli
+            </button>
+            <button id="btnCopyBroadcastText" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-extrabold bg-white/10 hover:bg-white/20 text-white border border-white/15 transition">
+              Salin Teks Promosi WA
+            </button>
+          </div>
+        </div>
+        <input id="inputGeneratedShareUrl" type="text" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs text-blue-300 font-mono select-all focus:outline-none" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 3: PER-APP & PER-PLAN CUSTOM PRICING + PROFIT CALCULATOR         -->
+  <!-- ===================================================================== -->
+  <section id="viewPricing" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-5">
+    <div class="porcelain-card rounded-3xl p-5 sm:p-6 space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-blue-600">Manajemen Harga 42 Aplikasi</span>
+          <h2 class="text-xl font-extrabold text-slate-900">Atur Harga Jual per Paket &amp; Cek Keuntungan Bersih</h2>
+          <p class="text-xs text-slate-500">Kamu bisa ubah harga jual paket tertentu secara manual. Kosongkan kolom harga kustom jika ingin mengikuti markup global.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800">
+            Rata-rata Cuan / Paket: <strong id="avgProfitBadge" class="font-black">+Rp0</strong>
+          </div>
+          <button id="btnClearCustomPrices" type="button" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+            Reset Semua Harga Manual
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter inside Pricing Table -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <input id="searchPricingTableInput" type="text" placeholder="Cari aplikasi atau nama paket di tabel harga..." class="flex-1 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-blue-600" />
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-white text-[11px] uppercase tracking-wider">
+              <th class="py-3 px-4">Aplikasi &amp; Kategori</th>
+              <th class="py-3 px-4">Varian Paket / Durasi</th>
+              <th class="py-3 px-4">Harga Modal (MTStore)</th>
+              <th class="py-3 px-4">Harga Jual Kamu (Bisa Diedit)</th>
+              <th class="py-3 px-4">Untung Bersih (Cuan)</th>
+            </tr>
+          </thead>
+          <tbody id="pricingTableBody" class="divide-y divide-slate-200 text-xs bg-white"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- FLOATING BOTTOM CHECKOUT BAR                                          -->
+  <!-- ===================================================================== -->
+  <div id="floatingCartBar" class="fixed bottom-4 inset-x-4 z-30 max-w-3xl mx-auto hidden">
+    <div class="obsidian-banner rounded-2xl p-3.5 sm:px-5 flex items-center justify-between gap-3 text-white">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-sm" id="floatingCartCount">0</div>
+        <div>
+          <div class="text-xs text-slate-300 font-medium">Total Estimasi Invoice</div>
+          <div class="text-base sm:text-lg font-extrabold text-white" id="floatingCartTotal">Rp0</div>
+        </div>
+      </div>
+      <button id="btnFloatingOpenCart" type="button" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-blue-600 hover:bg-blue-500 text-white shadow transition">
+        Lihat Invoice &amp; Order WA &rarr;
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- INVOICE / CART MODAL DRAWER                                           -->
+  <!-- ===================================================================== -->
+  <div id="cartModalBackdrop" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-blue-100">
+      <!-- Modal Header -->
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-400">Checkout Pesanan</span>
+          <h3 class="text-base font-extrabold" id="modalCartStoreTitle">Invoice Pesanan</h3>
+        </div>
+        <button id="btnCloseCartModal" type="button" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-sm font-bold">✕</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 overflow-y-auto space-y-4 flex-1">
+        <div id="cartItemsContainer" class="space-y-2.5"></div>
+
+        <div class="pt-2 border-t border-slate-100 space-y-3">
+          <div>
+            <label for="inputBuyerName" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1">Nama Pembeli / Email Invite (Opsional)</label>
+            <input id="inputBuyerName" type="text" placeholder="Contoh: Budi (budi@gmail.com)" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="inputBuyerNote" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1">Catatan Tambahan</label>
+            <input id="inputBuyerNote" type="text" placeholder="Contoh: Bayar via QRIS, mohon segera diproses kak" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-blue-600" />
+          </div>
+        </div>
+
+        <!-- WhatsApp Preview Box -->
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500">Preview Format Pesan WhatsApp</span>
+            <button id="btnCopyInvoiceText" type="button" class="text-[11px] font-bold text-blue-600 hover:underline">Salin Teks</button>
+          </div>
+          <pre id="waInvoicePreview" class="text-[11px] text-slate-700 whitespace-pre-wrap font-mono leading-relaxed max-h-36 overflow-y-auto"></pre>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200/80 space-y-2.5">
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-bold text-slate-600">Total Pembayaran</span>
+          <span id="modalCartTotalAmount" class="text-lg font-black text-blue-700">Rp0</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <button id="btnClearCart" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 transition">
+            Kosongkan Invoice
+          </button>
+          <button id="btnCheckoutWhatsApp" type="button" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold text-white sapphire-pill flex items-center justify-center gap-2 transition">
+            <span>Kirim ke WhatsApp</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastNotification" class="fixed top-16 right-4 z-50 hidden px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-xl border border-blue-500/40 flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toastMessageText">Berhasil disimpan!</span>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. COMPLETE 42 OFFICIAL APK CATALOG DATA (Grounded from tokomt.my.id)
+    // =========================================================================
+    const BASE_CATALOG = [
+      {
+        id: "alight-motion",
+        name: "Alight Motion",
+        category: "DESAIN & EDITING",
+        badge: "AM",
+        color: "#0284C7",
+        popular: 88,
+        plans: [
+          { id: "am-priv-1y-seller", name: "Private 1 Tahun (Akun Penjual)", basePrice: 1000 },
+          { id: "am-priv-1y-buyer", name: "Private 1 Tahun (Akun Pembeli)", basePrice: 1000 }
+        ]
+      },
+      {
+        id: "appmus",
+        name: "AppMus (Apple Music)",
+        category: "MUSIK & AUDIO",
+        badge: "AM",
+        color: "#E11D48",
+        popular: 82,
+        plans: [
+          { id: "appmus-fam-1m", name: "Famplan 1 Bulan (via Invite)", basePrice: 1500 },
+          { id: "appmus-ind-1m", name: "Indplan 1 Bulan", basePrice: 5000 },
+          { id: "appmus-head-1m", name: "Famhead 1 Bulan", basePrice: 5500 }
+        ]
+      },
+      {
+        id: "bstation",
+        name: "Bstation",
+        category: "HIBURAN & STREAMING",
+        badge: "BS",
+        color: "#2563EB",
+        popular: 84,
+        plans: [
+          { id: "bs-sh-1m", name: "Sharing 1 Bulan", basePrice: 4500 },
+          { id: "bs-sh-3m", name: "Sharing 3 Bulan", basePrice: 7000 },
+          { id: "bs-sh-1y", name: "Sharing 1 Tahun", basePrice: 9000 }
+        ]
+      },
+      {
+        id: "camscanner",
+        name: "CamScanner",
+        category: "PRODUKTIVITAS",
+        badge: "CS",
+        color: "#0D9488",
+        popular: 75,
+        plans: [
+          { id: "cs-sh-1m", name: "Sharing 1 Bulan", basePrice: 4500 },
+          { id: "cs-sh-1y", name: "Sharing 1 Tahun", basePrice: 14000 }
+        ]
+      },
+      {
+        id: "canva",
+        name: "Canva Pro",
+        category: "DESAIN & EDITING",
+        badge: "CV",
+        color: "#4F46E5",
+        popular: 99,
+        plans: [
+          { id: "cv-pro-1m", name: "Pro Member 1 Bulan (via Invite Email)", basePrice: 500 },
+          { id: "cv-pro-3m", name: "Pro Member 3 Bulan (via Invite)", basePrice: 1500 },
+          { id: "cv-head-1m", name: "Pro Famhead 1 Bulan", basePrice: 4000 },
+          { id: "cv-edu-life", name: "Lifetime Edu (via Invite)", basePrice: 5000 }
+        ]
+      },
+      {
+        id: "capcut",
+        name: "CapCut Pro",
+        category: "DESAIN & EDITING",
+        badge: "CC",
+        color: "#0F172A",
+        popular: 98,
+        plans: [
+          { id: "cc-sh-7d", name: "Sharing 7 Hari", basePrice: 3500 },
+          { id: "cc-sh-1m", name: "Sharing 1 Bulan", basePrice: 17000 },
+          { id: "cc-priv-1m", name: "Private 1 Bulan", basePrice: 27000 }
+        ]
+      },
+      {
+        id: "catchplay",
+        name: "Catchplay+",
+        category: "HIBURAN & STREAMING",
+        badge: "CP",
+        color: "#EA580C",
+        popular: 70,
+        plans: [
+          { id: "cp-sh-1m", name: "Sharing 1 Bulan", basePrice: 4000 }
+        ]
+      },
+      {
+        id: "chatgpt",
+        name: "ChatGPT Plus / Go",
+        category: "AI & EDUKASI",
+        badge: "AI",
+        color: "#059669",
+        popular: 97,
+        plans: [
+          { id: "gpt-go-1m", name: "Go Sharing 1 Bulan", basePrice: 9500 },
+          { id: "gpt-plus-1m", name: "Plus Sharing 1 Bulan", basePrice: 25000 }
+        ]
+      },
+      {
+        id: "dazzcam",
+        name: "Dazzcam",
+        category: "DESAIN & EDITING",
+        badge: "DZ",
+        color: "#B45309",
+        popular: 78,
+        plans: [
+          { id: "dz-sh-life", name: "Sharing Lifetime", basePrice: 13000 }
+        ]
+      },
+      {
+        id: "disney",
+        name: "Disney+ Hotstar",
+        category: "HIBURAN & STREAMING",
+        badge: "D+",
+        color: "#1E3A8A",
+        popular: 93,
+        plans: [
+          { id: "ds-sh-6u", name: "Sharing 6U 1 Bulan", basePrice: 13000 },
+          { id: "ds-sh-3u", name: "Sharing 3U 1 Bulan", basePrice: 22000 }
+        ]
+      },
+      {
+        id: "duolingo",
+        name: "Duolingo Super",
+        category: "AI & EDUKASI",
+        badge: "DL",
+        color: "#16A34A",
+        popular: 85,
+        plans: [
+          { id: "duo-fam-1m", name: "Famplan 1 Bulan (via Invite Email)", basePrice: 2000 },
+          { id: "duo-priv-1m", name: "Private 1 Bulan Plan Super", basePrice: 2500 }
+        ]
+      },
+      {
+        id: "gemini",
+        name: "Gemini AI Advanced",
+        category: "AI & EDUKASI",
+        badge: "GM",
+        color: "#2563EB",
+        popular: 94,
+        plans: [
+          { id: "gem-plus-1m", name: "Private 1 Bulan Plan Plus (Invite Email)", basePrice: 4000 },
+          { id: "gem-pro-1m", name: "Private 1 Bulan Plan Pro", basePrice: 8000 },
+          { id: "gem-pro-18m", name: "Private 18 Bulan Plan Pro", basePrice: 13000 }
+        ]
+      },
+      {
+        id: "getcontact",
+        name: "Getcontact",
+        category: "PRODUKTIVITAS",
+        badge: "GC",
+        color: "#0284C7",
+        popular: 89,
+        plans: [
+          { id: "gc-cek", name: "Cek Nomor via Admin", basePrice: 500 },
+          { id: "gc-priv-1m", name: "Private 1 Bulan (Nomor Pembeli)", basePrice: 7000 }
+        ]
+      },
+      {
+        id: "grammarly",
+        name: "Grammarly",
+        category: "AI & EDUKASI",
+        badge: "GR",
+        color: "#0D9488",
+        popular: 77,
+        plans: [
+          { id: "gr-sh-1m", name: "Sharing 1 Bulan", basePrice: 7000 },
+          { id: "gr-priv-1m", name: "Private 1 Bulan", basePrice: 23000 }
+        ]
+      },
+      {
+        id: "hbo",
+        name: "HBO GO / Max",
+        category: "HIBURAN & STREAMING",
+        badge: "HB",
+        color: "#4338CA",
+        popular: 83,
+        plans: [
+          { id: "hbo-sh-std", name: "Sharing Std 1 Bulan", basePrice: 6500 },
+          { id: "hbo-sh-ult", name: "Sharing Ultimate 1 Bulan", basePrice: 10000 },
+          { id: "hbo-pr-std", name: "Private Std 1 Bulan", basePrice: 23000 },
+          { id: "hbo-pr-ult", name: "Private Ultimate 1 Bulan", basePrice: 42000 }
+        ]
+      },
+      {
+        id: "ibis-paint",
+        name: "Ibis Paint X",
+        category: "DESAIN & EDITING",
+        badge: "IB",
+        color: "#2563EB",
+        popular: 74,
+        plans: [
+          { id: "ib-priv-1m", name: "Private 1 Bulan", basePrice: 5000 },
+          { id: "ib-sh-1y", name: "Sharing 1 Tahun", basePrice: 13000 }
+        ]
+      },
+      {
+        id: "iqiyi",
+        name: "iQIYI",
+        category: "HIBURAN & STREAMING",
+        badge: "IQ",
+        color: "#16A34A",
+        popular: 86,
+        plans: [
+          { id: "iq-sh-std-1m", name: "Sharing Std 1 Bulan", basePrice: 4000 },
+          { id: "iq-sh-prem-1m", name: "Sharing Prem 1 Bulan", basePrice: 6000 },
+          { id: "iq-sh-std-3m", name: "Sharing Std 3 Bulan", basePrice: 12000 },
+          { id: "iq-sh-std-1y", name: "Sharing Std 1 Tahun", basePrice: 19000 },
+          { id: "iq-pr-std-1m", name: "Private Std 1 Bulan", basePrice: 27500 },
+          { id: "iq-pr-prem-1m", name: "Private Prem 1 Bulan", basePrice: 30500 }
+        ]
+      },
+      {
+        id: "lightroom",
+        name: "Adobe Lightroom",
+        category: "DESAIN & EDITING",
+        badge: "LR",
+        color: "#1D4ED8",
+        popular: 81,
+        plans: [
+          { id: "lr-sh-1y", name: "Sharing 1 Tahun", basePrice: 12000 }
+        ]
+      },
+      {
+        id: "loklok",
+        name: "Loklok",
+        category: "HIBURAN & STREAMING",
+        badge: "LK",
+        color: "#D97706",
+        popular: 80,
+        plans: [
+          { id: "lk-sh-basic", name: "Sharing Basic 1 Bulan", basePrice: 16000 },
+          { id: "lk-sh-alldev", name: "Sharing AllDev 1 Bulan", basePrice: 18500 }
+        ]
+      },
+      {
+        id: "meitu",
+        name: "Meitu VIP",
+        category: "DESAIN & EDITING",
+        badge: "MT",
+        color: "#DB2777",
+        popular: 85,
+        plans: [
+          { id: "mt-sh-vip-7d", name: "Sharing VIP 7 Hari", basePrice: 3500 },
+          { id: "mt-sh-vipp-7d", name: "Sharing VIP+ 7 Hari", basePrice: 4000 },
+          { id: "mt-pr-vip-7d", name: "Private VIP 7 Hari", basePrice: 7000 },
+          { id: "mt-pr-vipp-7d", name: "Private VIP+ 7 Hari", basePrice: 8000 },
+          { id: "mt-sh-vip-1m", name: "Sharing VIP 1 Bulan", basePrice: 16000 }
+        ]
+      },
+      {
+        id: "ms365",
+        name: "Microsoft 365",
+        category: "PRODUKTIVITAS",
+        badge: "MS",
+        color: "#2563EB",
+        popular: 84,
+        plans: [
+          { id: "ms-fam-1m", name: "Famplan 1 Bulan (via Invite Email)", basePrice: 4500 },
+          { id: "ms-head-1m", name: "Famhead 1 Bulan", basePrice: 8000 }
+        ]
+      },
+      {
+        id: "netflix",
+        name: "Netflix",
+        category: "HIBURAN & STREAMING",
+        badge: "NF",
+        color: "#DC2626",
+        popular: 100,
+        plans: [
+          { id: "nf-crack", name: "Crack Random Dur (Link)", basePrice: 2500 },
+          { id: "nf-1p2u-1m", name: "Sharing 1P2U 1 Bulan", basePrice: 22000 },
+          { id: "nf-1p1u-1m", name: "Sharing 1P1U 1 Bulan", basePrice: 27000 },
+          { id: "nf-semi-1m", name: "Semi Private 1 Bulan (2 Device)", basePrice: 32000 },
+          { id: "nf-priv-1m", name: "Private 1 Bulan", basePrice: 145000 }
+        ]
+      },
+      {
+        id: "picsart",
+        name: "Picsart Gold",
+        category: "DESAIN & EDITING",
+        badge: "PA",
+        color: "#9333EA",
+        popular: 83,
+        plans: [
+          { id: "pa-sh-7d", name: "Sharing 7 Hari", basePrice: 3000 },
+          { id: "pa-pr-7d", name: "Private 7 Hari", basePrice: 6500 },
+          { id: "pa-sh-1m", name: "Sharing Gold Pro 1 Bulan", basePrice: 10500 }
+        ]
+      },
+      {
+        id: "polarr",
+        name: "Polarr",
+        category: "DESAIN & EDITING",
+        badge: "PL",
+        color: "#475569",
+        popular: 71,
+        plans: [
+          { id: "pl-sh-1y", name: "Sharing 1 Tahun", basePrice: 9000 }
+        ]
+      },
+      {
+        id: "prime",
+        name: "Prime Video",
+        category: "HIBURAN & STREAMING",
+        badge: "PV",
+        color: "#0284C7",
+        popular: 87,
+        plans: [
+          { id: "pv-sh-1m", name: "Sharing 1 Bulan", basePrice: 4000 },
+          { id: "pv-pr-1m", name: "Private 1 Bulan", basePrice: 8000 }
+        ]
+      },
+      {
+        id: "quillbot",
+        name: "Quillbot",
+        category: "AI & EDUKASI",
+        badge: "QB",
+        color: "#15803D",
+        popular: 79,
+        plans: [
+          { id: "qb-sh-1m", name: "Sharing 1 Bulan", basePrice: 7000 },
+          { id: "qb-pr-1m", name: "Private 1 Bulan", basePrice: 30000 }
+        ]
+      },
+      {
+        id: "remini",
+        name: "Remini Pro",
+        category: "DESAIN & EDITING",
+        badge: "RM",
+        color: "#BE123C",
+        popular: 82,
+        plans: [
+          { id: "rm-web-2w", name: "Private Web 2 Minggu", basePrice: 7000 },
+          { id: "rm-and-1y", name: "Sharing 1 Tahun Android", basePrice: 15000 }
+        ]
+      },
+      {
+        id: "scribd",
+        name: "Scribd",
+        category: "AI & EDUKASI",
+        badge: "SC",
+        color: "#0369A1",
+        popular: 73,
+        plans: [
+          { id: "sc-sh-1m", name: "Sharing 1 Bulan", basePrice: 4000 },
+          { id: "sc-pr-1m", name: "Private 1 Bulan", basePrice: 8000 }
+        ]
+      },
+      {
+        id: "spotify",
+        name: "Spotify Premium",
+        category: "MUSIK & AUDIO",
+        badge: "SP",
+        color: "#16A34A",
+        popular: 96,
+        plans: [
+          { id: "sp-ind-1m", name: "Indplan 1 Bulan", basePrice: 16500 },
+          { id: "sp-fam-1m", name: "Famplan 1 Bulan", basePrice: 18500 }
+        ]
+      },
+      {
+        id: "strava",
+        name: "Strava",
+        category: "PRODUKTIVITAS",
+        badge: "ST",
+        color: "#EA580C",
+        popular: 76,
+        plans: [
+          { id: "st-nogar-1m", name: "Private 1 Bulan (No Garansi)", basePrice: 6000 },
+          { id: "st-gar-1m", name: "Private 1 Bulan (Full Garansi)", basePrice: 12000 }
+        ]
+      },
+      {
+        id: "stremio",
+        name: "Stremio",
+        category: "HIBURAN & STREAMING",
+        badge: "SR",
+        color: "#6D28D9",
+        popular: 72,
+        plans: [
+          { id: "sr-sh-1m", name: "Sharing 1 Bulan", basePrice: 15000 }
+        ]
+      },
+      {
+        id: "sushiroll",
+        name: "Sushiroll",
+        category: "HIBURAN & STREAMING",
+        badge: "SS",
+        color: "#E11D48",
+        popular: 72,
+        plans: [
+          { id: "ss-sh-1m", name: "Sharing 1 Bulan", basePrice: 4000 }
+        ]
+      },
+      {
+        id: "vidio",
+        name: "Vidio Platinum",
+        category: "HIBURAN & STREAMING",
+        badge: "VD",
+        color: "#E11D48",
+        popular: 95,
+        plans: [
+          { id: "vd-sh-mob", name: "Sharing Mobile 1 Bulan", basePrice: 19500 },
+          { id: "vd-sh-all", name: "Sharing AllDev 1 Bulan", basePrice: 22500 },
+          { id: "vd-pr-mob", name: "Private Mobile 1 Bulan", basePrice: 33000 },
+          { id: "vd-pr-all", name: "Private AllDev 1 Bulan", basePrice: 39000 }
+        ]
+      },
+      {
+        id: "viki",
+        name: "Viki Rakuten",
+        category: "HIBURAN & STREAMING",
+        badge: "VK",
+        color: "#2563EB",
+        popular: 73,
+        plans: [
+          { id: "vk-sh-1m", name: "Sharing 1 Bulan", basePrice: 7500 }
+        ]
+      },
+      {
+        id: "viu",
+        name: "Viu Premium",
+        category: "HIBURAN & STREAMING",
+        badge: "VU",
+        color: "#D97706",
+        popular: 91,
+        plans: [
+          { id: "vu-pr-3m", name: "Private 3 Bulan", basePrice: 500 },
+          { id: "vu-pr-1y", name: "Private 1 Tahun", basePrice: 2000 },
+          { id: "vu-pr-life", name: "Private Lifetime", basePrice: 2000 }
+        ]
+      },
+      {
+        id: "vsco",
+        name: "VSCO Plus",
+        category: "DESAIN & EDITING",
+        badge: "VS",
+        color: "#334155",
+        popular: 76,
+        plans: [
+          { id: "vs-sh-1y", name: "Sharing 1 Tahun", basePrice: 12500 }
+        ]
+      },
+      {
+        id: "wattpad",
+        name: "Wattpad Premium",
+        category: "AI & EDUKASI",
+        badge: "WP",
+        color: "#EA580C",
+        popular: 74,
+        plans: [
+          { id: "wp-sh-1m", name: "Sharing 1 Bulan", basePrice: 4500 },
+          { id: "wp-sh-1y", name: "Sharing 1 Tahun", basePrice: 9500 }
+        ]
+      },
+      {
+        id: "wetv",
+        name: "WeTV VIP",
+        category: "HIBURAN & STREAMING",
+        badge: "WT",
+        color: "#EA580C",
+        popular: 90,
+        plans: [
+          { id: "wt-sh-1m", name: "Sharing 1 Bulan", basePrice: 4000 },
+          { id: "wt-pr-1m", name: "Private 1 Bulan", basePrice: 22000 }
+        ]
+      },
+      {
+        id: "wink",
+        name: "Wink VIP",
+        category: "DESAIN & EDITING",
+        badge: "WK",
+        color: "#EC4899",
+        popular: 84,
+        plans: [
+          { id: "wk-and-7d", name: "Private Android 7 Hari", basePrice: 4000 },
+          { id: "wk-ios-7d", name: "Private iOS 7 Hari", basePrice: 5000 }
+        ]
+      },
+      {
+        id: "youku",
+        name: "Youku VIP",
+        category: "HIBURAN & STREAMING",
+        badge: "YK",
+        color: "#2563EB",
+        popular: 78,
+        plans: [
+          { id: "yk-sh-1m", name: "Sharing 1 Bulan", basePrice: 4500 },
+          { id: "yk-sh-3m", name: "Sharing 3 Bulan", basePrice: 7000 },
+          { id: "yk-sh-1y", name: "Sharing 1 Tahun", basePrice: 9000 }
+        ]
+      },
+      {
+        id: "youtube",
+        name: "YouTube Premium",
+        category: "HIBURAN & STREAMING",
+        badge: "YT",
+        color: "#DC2626",
+        popular: 97,
+        plans: [
+          { id: "yt-jaspay-1m", name: "Private 1 Bulan (Jaspay)", basePrice: 2000 },
+          { id: "yt-fam-1m", name: "Famplan 1 Bulan (via Invite Email)", basePrice: 2500 },
+          { id: "yt-bebas-1m", name: "Private 1 Bulan (Bebas Pilih Plan)", basePrice: 10000 }
+        ]
+      },
+      {
+        id: "zoom",
+        name: "Zoom Pro",
+        category: "PRODUKTIVITAS",
+        badge: "ZM",
+        color: "#2563EB",
+        popular: 88,
+        plans: [
+          { id: "zm-pr-7d", name: "Private 7 Hari", basePrice: 3000 },
+          { id: "zm-pr-14d", name: "Private 14 Hari", basePrice: 6000 },
+          { id: "zm-pr-1m", name: "Private 1 Bulan (Renew 2x)", basePrice: 10000 }
+        ]
+      }
+    ];
+
+    const CATEGORIES = [
+      { id: "ALL", label: "Semua Aplikasi" },
+      { id: "HIBURAN & STREAMING", label: "Hiburan & Streaming" },
+      { id: "DESAIN & EDITING", label: "Desain & Editing" },
+      { id: "AI & EDUKASI", label: "AI & Edukasi" },
+      { id: "PRODUKTIVITAS", label: "Produktivitas" },
+      { id: "MUSIK & AUDIO", label: "Musik & Audio" }
+    ];
+
+    // =========================================================================
+    // 2. STATE MANAGEMENT (Reseller Config, Selected Plans, Cart, Mode)
+    // =========================================================================
+    const DEFAULT_CONFIG = {
+      storeName: "MTStore Digital Premium",
+      waNumber: "0877-9233-8250",
+      storeTagline: "Katalog Aplikasi Premium Bergaransi • Aktivasi Cepat via WhatsApp",
+      opHours: "Selasa–Minggu 08.00–22.00 WIB (Senin Libur)",
+      markupMode: "flat", // 'flat' or 'percent'
+      markupValue: 2000,  // default +Rp2.000 example for resellers
+      rounding: 0,        // 0, 500, or 1000
+      customPrices: {}    // { planId: exactPriceNumber }
+    };
+
+    let state = {
+      config: JSON.parse(JSON.stringify(DEFAULT_CONFIG)),
+      activeTab: "storefront", // 'storefront' | 'settings' | 'pricing'
+      buyerSimulation: false,
+      activeCategory: "ALL",
+      searchQuery: "",
+      sortBy: "az",
+      pricingSearchQuery: "",
+      selectedPlanByApp: {}, // { appId: planId }
+      cart: [],              // [{ planId, appId, appName, planName, qty }]
+      logoTapCount: 0,
+      logoTapTimer: null
+    };
+
+    // Initialize default selected plan per app
+    BASE_CATALOG.forEach((app) => {
+      state.selectedPlanByApp[app.id] = app.plans[0].id;
+    });
+
+    // =========================================================================
+    // 3. HELPER FUNCTIONS (Formatting, Price Calculation, URL Encoding)
+    // =========================================================================
+    function formatRupiah(num) {
+      const n = Math.max(0, Math.round(Number(num) || 0));
+      return "Rp" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function normalizeWaNumber(raw) {
+      const digits = String(raw || "").replace(/\D/g, "");
+      if (!digits) return "6287792338250";
+      if (digits.startsWith("0")) return "62" + digits.slice(1);
+      if (digits.startsWith("8")) return "62" + digits;
+      return digits;
+    }
+
+    function getStoreInitials(name) {
+      const cleaned = String(name || "MT").trim();
+      if (!cleaned) return "MT";
+      const words = cleaned.split(/\s+/);
+      if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+      return (words[0][0] + words[1][0]).toUpperCase();
+    }
+
+    function computeSellingPrice(plan) {
+      const custom = state.config.customPrices[plan.id];
+      if (custom !== undefined && custom !== null && custom !== "" && !isNaN(Number(custom))) {
+        return Math.max(0, Math.round(Number(custom)));
+      }
+      let rawPrice = plan.basePrice;
+      const mv = Math.max(0, Number(state.config.markupValue) || 0);
+      if (state.config.markupMode === "percent") {
+        rawPrice = plan.basePrice * (1 + mv / 100);
+      } else {
+        rawPrice = plan.basePrice + mv;
+      }
+      const roundStep = Number(state.config.rounding) || 0;
+      if (roundStep > 0) {
+        rawPrice = Math.ceil(rawPrice / roundStep) * roundStep;
+      }
+      return Math.max(0, Math.round(rawPrice));
+    }
+
+    function getAppMinPrice(app) {
+      return Math.min(...app.plans.map((p) => computeSellingPrice(p)));
+    }
+
+    function saveConfigToStorage() {
+      try {
+        localStorage.setItem("mtstore_reseller_cfg_v1", JSON.stringify(state.config));
+      } catch (e) {
+        // Ignore storage errors in restricted iframes
+      }
+    }
+
+    function loadConfigFromUrlOrStorage() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("toko") || params.has("wa") || params.has("up")) {
+          state.config.storeName = params.get("toko") || DEFAULT_CONFIG.storeName;
+          state.config.waNumber = params.get("wa") || DEFAULT_CONFIG.waNumber;
+          state.config.storeTagline = params.get("slogan") || DEFAULT_CONFIG.storeTagline;
+          state.config.opHours = params.get("jam") || DEFAULT_CONFIG.opHours;
+          state.config.markupMode = params.get("mode") === "percent" ? "percent" : "flat";
+          state.config.markupValue = Number(params.get("up") ?? 0);
+          state.config.rounding = Number(params.get("round") ?? 0);
+          const customRaw = params.get("cp");
+          if (customRaw) {
+            try {
+              state.config.customPrices = JSON.parse(atob(customRaw));
+            } catch (err) {
+              state.config.customPrices = {};
+            }
+          }
+          if (params.get("view") === "buyer") {
+            state.buyerSimulation = true;
+          }
+          return;
+        }
+        const saved = localStorage.getItem("mtstore_reseller_cfg_v1");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          state.config = { ...DEFAULT_CONFIG, ...parsed, customPrices: parsed.customPrices || {} };
+        }
+      } catch (e) {
+        // Keep default config
+      }
+    }
+
+    function buildShareableBuyerUrl() {
+      const base = window.location.origin && window.location.origin !== "null"
+        ? window.location.origin + window.location.pathname
+        : "https://storemt.my.id/";
+      const params = new URLSearchParams();
+      params.set("view", "buyer");
+      params.set("toko", state.config.storeName);
+      params.set("wa", state.config.waNumber);
+      params.set("slogan", state.config.storeTagline);
+      params.set("jam", state.config.opHours);
+      params.set("mode", state.config.markupMode);
+      params.set("up", String(state.config.markupValue));
+      if (Number(state.config.rounding) > 0) {
+        params.set("round", String(state.config.rounding));
+      }
+      const cpKeys = Object.keys(state.config.customPrices || {});
+      if (cpKeys.length > 0) {
+        try {
+          params.set("cp", btoa(JSON.stringify(state.config.customPrices)));
+        } catch (e) {}
+      }
+      return `${base}?${params.toString()}`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toastNotification");
+      const text = document.getElementById("toastMessageText");
+      text.textContent = msg;
+      toast.classList.remove("hidden");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 2600);
+    }
+
+    function copyTextToClipboard(text, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(successMsg);
+        }).catch(() => fallbackCopy(text, successMsg));
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast(successMsg);
+      } catch (e) {
+        showToast("Gagal menyalin teks");
+      }
+      document.body.removeChild(ta);
+    }
+
+    // =========================================================================
+    // 4. UI RENDERING FUNCTIONS
+    // =========================================================================
+    function renderHeaderAndHero() {
+      const cfg = state.config;
+      document.getElementById("storeInitialsBox").textContent = getStoreInitials(cfg.storeName);
+      document.getElementById("headerStoreName").textContent = cfg.storeName;
+      document.getElementById("headerStoreTagline").textContent = cfg.storeTagline;
+      document.getElementById("headerWaDisplay").textContent = cfg.waNumber;
+      document.getElementById("heroStoreName").textContent = cfg.storeName;
+      document.getElementById("heroOpHours").textContent = cfg.opHours;
+      document.getElementById("heroWaNumber").textContent = cfg.waNumber;
+      document.getElementById("modalCartStoreTitle").textContent = `Invoice • ${cfg.storeName}`;
+
+      // Show or hide reseller top bar based on buyerSimulation
+      const studioBar = document.getElementById("studioTopBar");
+      if (state.buyerSimulation) {
+        studioBar.classList.add("hidden");
+      } else {
+        studioBar.classList.remove("hidden");
+      }
+    }
+
+    function renderTabs() {
+      const views = {
+        storefront: document.getElementById("viewStorefront"),
+        settings: document.getElementById("viewSettings"),
+        pricing: document.getElementById("viewPricing")
+      };
+      const btns = {
+        storefront: document.getElementById("tabBtnStorefront"),
+        settings: document.getElementById("tabBtnSettings"),
+        pricing: document.getElementById("tabBtnPricing")
+      };
+
+      Object.keys(views).forEach((k) => {
+        if (k === state.activeTab) {
+          views[k].classList.remove("hidden");
+          btns[k].className = "px-3 py-1.5 rounded-xl text-xs font-bold transition bg-blue-600 text-white shadow-sm";
+        } else {
+          views[k].classList.add("hidden");
+          btns[k].className = "px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800 text-slate-200 hover:bg-slate-700";
+        }
+      });
+    }
+
+    function renderCategoryPills() {
+      const bar = document.getElementById("categoryFilterBar");
+      bar.innerHTML = "";
+      CATEGORIES.forEach((cat) => {
+        const count = cat.id === "ALL"
+          ? BASE_CATALOG.length
+          : BASE_CATALOG.filter((a) => a.category === cat.id).length;
+        const isActive = state.activeCategory === cat.id;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = isActive
+          ? "px-3.5 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap sapphire-pill text-white transition"
+          : "px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-blue-50 text-slate-700 border border-slate-200/80 transition";
+        btn.textContent = `${cat.label} (${count})`;
+        btn.addEventListener("click", () => {
+          state.activeCategory = cat.id;
+          renderCategoryPills();
+          renderCatalogGrid();
+        });
+        bar.appendChild(btn);
+      });
+    }
+
+    function renderCatalogGrid() {
+      const grid = document.getElementById("catalogGrid");
+      grid.innerHTML = "";
+
+      const q = state.searchQuery.trim().toLowerCase();
+      let filtered = BASE_CATALOG.filter((app) => {
+        const matchCat = state.activeCategory === "ALL" || app.category === state.activeCategory;
+        if (!matchCat) return false;
+        if (!q) return true;
+        const inName = app.name.toLowerCase().includes(q) || app.category.toLowerCase().includes(q);
+        const inPlans = app.plans.some((p) => p.name.toLowerCase().includes(q));
+        return inName || inPlans;
+      });
+
+      if (state.sortBy === "cheapest") {
+        filtered.sort((a, b) => getAppMinPrice(a) - getAppMinPrice(b));
+      } else if (state.sortBy === "popular") {
+        filtered.sort((a, b) => b.popular - a.popular);
+      } else {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      document.getElementById("shownAppCount").textContent = String(filtered.length);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full porcelain-card rounded-3xl p-10 text-center space-y-2">
+            <div class="text-base font-extrabold text-slate-800">Aplikasi tidak ditemukan</div>
+            <p class="text-xs text-slate-500">Coba kata kunci lain atau pilih kategori "Semua Aplikasi".</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((app) => {
+        const selectedPlanId = state.selectedPlanByApp[app.id] || app.plans[0].id;
+        const activePlan = app.plans.find((p) => p.id === selectedPlanId) || app.plans[0];
+        const sellingPrice = computeSellingPrice(activePlan);
+        const minPrice = getAppMinPrice(app);
+
+        const card = document.createElement("article");
+        card.className = "porcelain-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between gap-4";
+
+        // Plan chips HTML
+        const plansHtml = app.plans.map((p) => {
+          const pPrice = computeSellingPrice(p);
+          const isSelected = p.id === activePlan.id;
+          return `
+            <button type="button" data-app-id="${app.id}" data-plan-id="${p.id}"
+              class="select-plan-btn plan-chip w-full text-left px-3 py-2 rounded-xl border text-xs flex items-center justify-between gap-2 ${
+                isSelected
+                  ? "plan-chip-active font-extrabold"
+                  : "bg-slate-50/80 border-slate-200/90 text-slate-700 hover:border-blue-300 font-semibold"
+              }">
+              <span class="truncate">${p.name}</span>
+              <span class="shrink-0 font-black ${isSelected ? "text-blue-700" : "text-slate-900"}">${formatRupiah(pPrice)}</span>
+            </button>
+          `;
+        }).join("");
+
+        card.innerHTML = `
+          <div class="space-y-3.5">
+            <!-- Card Top Header -->
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-sm shrink-0" style="background:${app.color}">
+                  ${app.badge}
+                </div>
+                <div>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 block">${app.category}</span>
+                  <h3 class="text-base font-extrabold text-slate-900 leading-snug">${app.name}</h3>
+                  <div class="text-[11px] text-slate-500 font-semibold">Mulai <strong class="text-slate-800">${formatRupiah(minPrice)}</strong></div>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-600 shrink-0">${app.plans.length} Paket</span>
+            </div>
+
+            <!-- Plan Selector List -->
+            <div class="space-y-1.5 max-h-44 overflow-y-auto pr-0.5">
+              ${plansHtml}
+            </div>
+          </div>
+
+          <!-- Card Footer Action -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[10px] uppercase font-bold text-slate-400">Harga Paket Dipilih</div>
+              <div class="text-lg font-black text-blue-700">${formatRupiah(sellingPrice)}</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button type="button" data-add-app="${app.id}" class="add-to-cart-btn px-3.5 py-2.5 rounded-xl text-xs font-extrabold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition">
+                + Invoice
+              </button>
+              <button type="button" data-buy-now="${app.id}" class="buy-now-btn px-3.5 py-2.5 rounded-xl text-xs font-extrabold text-white sapphire-pill transition">
+                Beli
+              </button>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // Attach listeners for plan selection & cart buttons
+      grid.querySelectorAll(".select-plan-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const appId = btn.getAttribute("data-app-id");
+          const planId = btn.getAttribute("data-plan-id");
+          state.selectedPlanByApp[appId] = planId;
+          renderCatalogGrid();
+        });
+      });
+
+      grid.querySelectorAll(".add-to-cart-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const appId = btn.getAttribute("data-add-app");
+          addSelectedPlanToCart(appId, false);
+        });
+      });
+
+      grid.querySelectorAll(".buy-now-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const appId = btn.getAttribute("data-buy-now");
+          addSelectedPlanToCart(appId, true);
+        });
+      });
+    }
+
+    function renderSettingsForm() {
+      const cfg = state.config;
+      document.getElementById("inputStoreName").value = cfg.storeName;
+      document.getElementById("inputWaNumber").value = cfg.waNumber;
+      document.getElementById("inputStoreTagline").value = cfg.storeTagline;
+      document.getElementById("inputOpHours").value = cfg.opHours;
+      document.getElementById("inputMarkupValue").value = cfg.markupValue;
+      document.getElementById("selectRounding").value = String(cfg.rounding || 0);
+
+      const btnFlat = document.getElementById("btnMarkupModeFlat");
+      const btnPct = document.getElementById("btnMarkupModePercent");
+      const lbl = document.getElementById("labelMarkupValue");
+
+      if (cfg.markupMode === "percent") {
+        btnPct.className = "px-3 py-2.5 rounded-xl text-xs font-extrabold border transition bg-blue-600 text-white border-blue-600";
+        btnFlat.className = "px-3 py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-200";
+        lbl.textContent = "Persentase Kenaikan Harga (%)";
+      } else {
+        btnFlat.className = "px-3 py-2.5 rounded-xl text-xs font-extrabold border transition bg-blue-600 text-white border-blue-600";
+        btnPct.className = "px-3 py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-200";
+        lbl.textContent = "Nominal Kenaikan Harga per Paket (Rp)";
+      }
+
+      document.getElementById("inputGeneratedShareUrl").value = buildShareableBuyerUrl();
+    }
+
+    function renderPricingTable() {
+      const tbody = document.getElementById("pricingTableBody");
+      tbody.innerHTML = "";
+      const q = state.pricingSearchQuery.trim().toLowerCase();
+
+      let totalProfit = 0;
+      let totalPlans = 0;
+
+      BASE_CATALOG.forEach((app) => {
+        app.plans.forEach((plan) => {
+          const sellPrice = computeSellingPrice(plan);
+          const profit = sellPrice - plan.basePrice;
+          totalProfit += profit;
+          totalPlans += 1;
+
+          if (q) {
+            const match = app.name.toLowerCase().includes(q) ||
+                          app.category.toLowerCase().includes(q) ||
+                          plan.name.toLowerCase().includes(q);
+            if (!match) return;
+          }
+
+          const hasCustom = state.config.customPrices[plan.id] !== undefined && state.config.customPrices[plan.id] !== "";
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-blue-50/40 transition";
+          tr.innerHTML = `
+            <td class="py-3 px-4">
+              <div class="font-extrabold text-slate-900">${app.name}</div>
+              <div class="text-[10px] font-bold text-slate-400">${app.category}</div>
+            </td>
+            <td class="py-3 px-4 font-semibold text-slate-700">${plan.name}</td>
+            <td class="py-3 px-4 font-bold text-slate-600">${formatRupiah(plan.basePrice)}</td>
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2">
+                <input type="number" step="500" min="0" data-custom-plan="${plan.id}"
+                  value="${sellPrice}"
+                  class="custom-price-input w-28 px-2.5 py-1.5 rounded-lg border ${
+                    hasCustom ? "border-blue-600 bg-blue-50/50 font-black text-blue-800" : "border-slate-200 font-bold text-slate-800"
+                  } text-xs focus:outline-none focus:border-blue-600" />
+                ${
+                  hasCustom
+                    ? `<button type="button" data-reset-plan="${plan.id}" class="reset-plan-btn text-[11px] font-bold text-rose-600 hover:underline">Reset</button>`
+                    : `<span class="text-[10px] text-slate-400">Otomatis</span>`
+                }
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold ${
+                profit > 0
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  : profit < 0
+                  ? "bg-rose-50 text-rose-700 border border-rose-200"
+                  : "bg-slate-100 text-slate-600"
+              }">
+                ${profit >= 0 ? "+" : ""}${formatRupiah(profit)}
+              </span>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+
+      const avgProfit = totalPlans > 0 ? Math.round(totalProfit / totalPlans) : 0;
+      document.getElementById("avgProfitBadge").textContent = (avgProfit >= 0 ? "+" : "") + formatRupiah(avgProfit);
+
+      // Attach listeners for custom price inputs
+      tbody.querySelectorAll(".custom-price-input").forEach((inp) => {
+        inp.addEventListener("change", () => {
+          const planId = inp.getAttribute("data-custom-plan");
+          const val = Number(inp.value);
+          if (!isNaN(val) && val >= 0) {
+            state.config.customPrices[planId] = Math.round(val);
+            saveConfigToStorage();
+            renderPricingTable();
+            renderCatalogGrid();
+            renderCartUI();
+            renderSettingsForm();
+            showToast("Harga paket diperbarui!");
+          }
+        });
+      });
+
+      tbody.querySelectorAll(".reset-plan-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const planId = btn.getAttribute("data-reset-plan");
+          delete state.config.customPrices[planId];
+          saveConfigToStorage();
+          renderPricingTable();
+          renderCatalogGrid();
+          renderCartUI();
+          renderSettingsForm();
+        });
+      });
+    }
+
+    // =========================================================================
+    // 5. CART & WHATSAPP INVOICE ENGINE
+    // =========================================================================
+    function addSelectedPlanToCart(appId, openModalImmediately) {
+      const app = BASE_CATALOG.find((a) => a.id === appId);
+      if (!app) return;
+      const planId = state.selectedPlanByApp[appId] || app.plans[0].id;
+      const plan = app.plans.find((p) => p.id === planId) || app.plans[0];
+
+      const existing = state.cart.find((item) => item.planId === plan.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({
+          planId: plan.id,
+          appId: app.id,
+          appName: app.name,
+          planName: plan.name,
+          qty: 1
+        });
+      }
+
+      renderCartUI();
+      if (openModalImmediately) {
+        openCartModal();
+      } else {
+        showToast(`${app.name} (${plan.name}) ditambahkan ke Invoice`);
+      }
+    }
+
+    function getCartItemPrice(item) {
+      const app = BASE_CATALOG.find((a) => a.id === item.appId);
+      if (!app) return 0;
+      const plan = app.plans.find((p) => p.id === item.planId);
+      return plan ? computeSellingPrice(plan) : 0;
+    }
+
+    function buildWhatsAppInvoiceText() {
+      const cfg = state.config;
+      const buyerName = document.getElementById("inputBuyerName").value.trim();
+      const buyerNote = document.getElementById("inputBuyerNote").value.trim();
+
+      const lines = [];
+      lines.push(`Halo Admin *${cfg.storeName}*, saya mau pesan aplikasi premium:`);
+      lines.push("");
+
+      let grandTotal = 0;
+      state.cart.forEach((item, idx) => {
+        const unitPrice = getCartItemPrice(item);
+        const sub = unitPrice * item.qty;
+        grandTotal += sub;
+        lines.push(`${idx + 1}. *${item.appName}* — ${item.planName}`);
+        lines.push(`   Jumlah: ${item.qty}x @ ${formatRupiah(unitPrice)} = *${formatRupiah(sub)}*`);
+      });
+
+      lines.push("");
+      lines.push(`*Total Pembayaran: ${formatRupiah(grandTotal)}*`);
+      lines.push(`Metode Pembayaran: *QRIS*`);
+      if (buyerName) lines.push(`Data Pembeli: ${buyerName}`);
+      if (buyerNote) lines.push(`Catatan: ${buyerNote}`);
+      lines.push("");
+      lines.push("Mohon info QRIS pembayarannya ya kak. Terima kasih!");
+      return lines.join("\n");
+    }
+
+    function renderCartUI() {
+      const totalItems = state.cart.reduce((acc, item) => acc + item.qty, 0);
+      const totalAmount = state.cart.reduce((acc, item) => acc + getCartItemPrice(item) * item.qty, 0);
+
+      document.getElementById("cartCountBadge").textContent = String(totalItems);
+      document.getElementById("floatingCartCount").textContent = String(totalItems);
+      document.getElementById("floatingCartTotal").textContent = formatRupiah(totalAmount);
+      document.getElementById("modalCartTotalAmount").textContent = formatRupiah(totalAmount);
+
+      const floatingBar = document.getElementById("floatingCartBar");
+      if (totalItems > 0 && state.activeTab === "storefront") {
+        floatingBar.classList.remove("hidden");
+      } else {
+        floatingBar.classList.add("hidden");
+      }
+
+      const container = document.getElementById("cartItemsContainer");
+      if (state.cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200 space-y-1">
+            <div class="text-sm font-extrabold text-slate-700">Invoice masih kosong</div>
+            <p class="text-xs text-slate-500">Pilih paket aplikasi di katalog lalu klik "+ Invoice".</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = state.cart.map((item) => {
+          const unitPrice = getCartItemPrice(item);
+          return `
+            <div class="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="min-w-0">
+                <div class="text-xs font-extrabold text-slate-900 truncate">${item.appName}</div>
+                <div class="text-[11px] text-slate-500 truncate">${item.planName}</div>
+                <div class="text-xs font-black text-blue-700 mt-0.5">${formatRupiah(unitPrice * item.qty)}</div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" data-cart-dec="${item.planId}" class="w-7 h-7 rounded-lg bg-white border border-slate-200 font-extrabold text-xs hover:bg-slate-100">-</button>
+                <span class="w-6 text-center text-xs font-extrabold">${item.qty}</span>
+                <button type="button" data-cart-inc="${item.planId}" class="w-7 h-7 rounded-lg bg-white border border-slate-200 font-extrabold text-xs hover:bg-slate-100">+</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        container.querySelectorAll("[data-cart-dec]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const pid = btn.getAttribute("data-cart-dec");
+            const target = state.cart.find((i) => i.planId === pid);
+            if (target) {
+              target.qty -= 1;
+              if (target.qty <= 0) {
+                state.cart = state.cart.filter((i) => i.planId !== pid);
+              }
+              renderCartUI();
+            }
+          });
+        });
+
+        container.querySelectorAll("[data-cart-inc]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const pid = btn.getAttribute("data-cart-inc");
+            const target = state.cart.find((i) => i.planId === pid);
+            if (target) {
+              target.qty += 1;
+              renderCartUI();
+            }
+          });
+        });
+      }
+
+      document.getElementById("waInvoicePreview").textContent =
+        state.cart.length > 0 ? buildWhatsAppInvoiceText() : "Pilih minimal 1 paket aplikasi untuk melihat format pesan WhatsApp.";
+    }
+
+    function openCartModal() {
+      renderCartUI();
+      const modal = document.getElementById("cartModalBackdrop");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeCartModal() {
+      const modal = document.getElementById("cartModalBackdrop");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    function buildBroadcastPriceListText() {
+      const cfg = state.config;
+      const lines = [];
+      lines.push(`*KATALOG HARGA ${cfg.storeName.toUpperCase()}*`);
+      lines.push(`${cfg.storeTagline}`);
+      lines.push("");
+      BASE_CATALOG.forEach((app, i) => {
+        const minP = getAppMinPrice(app);
+        lines.push(`${i + 1}. *${app.name}* — mulai *${formatRupiah(minP)}*`);
+      });
+      lines.push("");
+      lines.push(`Jam Operasional: ${cfg.opHours}`);
+      lines.push(`Order via WhatsApp: ${cfg.waNumber}`);
+      lines.push(`Katalog Lengkap: ${buildShareableBuyerUrl()}`);
+      return lines.join("\n");
+    }
+
+    // =========================================================================
+    // 6. EVENT LISTENERS & INITIALIZATION
+    // =========================================================================
+    function bindAllEvents() {
+      // Top Studio Tabs
+      document.getElementById("tabBtnStorefront").addEventListener("click", () => {
+        state.activeTab = "storefront";
+        renderTabs();
+        renderCartUI();
+      });
+      document.getElementById("tabBtnSettings").addEventListener("click", () => {
+        state.activeTab = "settings";
+        renderTabs();
+        renderSettingsForm();
+        renderCartUI();
+      });
+      document.getElementById("tabBtnPricing").addEventListener("click", () => {
+        state.activeTab = "pricing";
+        renderTabs();
+        renderPricingTable();
+        renderCartUI();
+      });
+
+      // Buyer Simulation Toggle (and 5x tap on store logo to unlock)
+      document.getElementById("btnSimulateBuyer").addEventListener("click", () => {
+        state.buyerSimulation = true;
+        state.activeTab = "storefront";
+        renderTabs();
+        renderHeaderAndHero();
+        showToast("Mode Pembeli aktif! Ketuk logo toko 5x untuk membuka kembali Panel Reseller.");
+      });
+
+      document.getElementById("brandLogoTrigger").addEventListener("click", () => {
+        state.logoTapCount += 1;
+        clearTimeout(state.logoTapTimer);
+        state.logoTapTimer = setTimeout(() => {
+          state.logoTapCount = 0;
+        }, 1800);
+        if (state.logoTapCount >= 5) {
+          state.logoTapCount = 0;
+          state.buyerSimulation = !state.buyerSimulation;
+          renderHeaderAndHero();
+          showToast(state.buyerSimulation ? "Mode Pembeli diaktifkan" : "Panel Reseller dibuka kembali!");
+        }
+      });
+
+      // Direct WA Header button
+      document.getElementById("btnDirectWaHeader").addEventListener("click", () => {
+        const wa = normalizeWaNumber(state.config.waNumber);
+        const text = encodeURIComponent(`Halo Admin ${state.config.storeName}, saya ingin tanya katalog aplikasi premium.`);
+        window.open(`https://wa.me/${wa}?text=${text}`, "_blank", "noopener,noreferrer");
+      });
+
+      // Search & Sort Catalog
+      const searchInp = document.getElementById("searchCatalogInput");
+      const clearBtn = document.getElementById("btnClearSearch");
+      searchInp.addEventListener("input", () => {
+        state.searchQuery = searchInp.value;
+        clearBtn.classList.toggle("hidden", !state.searchQuery);
+        renderCatalogGrid();
+      });
+      clearBtn.addEventListener("click", () => {
+        state.searchQuery = "";
+        searchInp.value = "";
+        clearBtn.classList.add("hidden");
+        renderCatalogGrid();
+      });
+
+      document.getElementById("sortCatalogSelect").addEventListener("change", (e) => {
+        state.sortBy = e.target.value;
+        renderCatalogGrid();
+      });
+
+      // Settings Inputs (Live Sync)
+      const syncSettingsInput = () => {
+        state.config.storeName = document.getElementById("inputStoreName").value.trim() || DEFAULT_CONFIG.storeName;
+        state.config.waNumber = document.getElementById("inputWaNumber").value.trim() || DEFAULT_CONFIG.waNumber;
+        state.config.storeTagline = document.getElementById("inputStoreTagline").value.trim() || DEFAULT_CONFIG.storeTagline;
+        state.config.opHours = document.getElementById("inputOpHours").value.trim() || DEFAULT_CONFIG.opHours;
+        state.config.markupValue = Math.max(0, Number(document.getElementById("inputMarkupValue").value) || 0);
+        state.config.rounding = Number(document.getElementById("selectRounding").value) || 0;
+        saveConfigToStorage();
+        renderHeaderAndHero();
+        renderCatalogGrid();
+        renderSettingsForm();
+        renderCartUI();
+      };
+
+      ["inputStoreName", "inputWaNumber", "inputStoreTagline", "inputOpHours", "inputMarkupValue", "selectRounding"].forEach((id) => {
+        document.getElementById(id).addEventListener("input", syncSettingsInput);
+        document.getElementById(id).addEventListener("change", syncSettingsInput);
+      });
+
+      document.getElementById("btnMarkupModeFlat").addEventListener("click", () => {
+        state.config.markupMode = "flat";
+        saveConfigToStorage();
+        renderSettingsForm();
+        renderCatalogGrid();
+        renderCartUI();
+      });
+
+      document.getElementById("btnMarkupModePercent").addEventListener("click", () => {
+        state.config.markupMode = "percent";
+        saveConfigToStorage();
+        renderSettingsForm();
+        renderCatalogGrid();
+        renderCartUI();
+      });
+
+      document.querySelectorAll(".preset-markup-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.config.markupMode = btn.getAttribute("data-preset-mode");
+          state.config.markupValue = Number(btn.getAttribute("data-preset-val")) || 0;
+          saveConfigToStorage();
+          renderSettingsForm();
+          renderCatalogGrid();
+          renderCartUI();
+          showToast(`Markup diubah ke ${state.config.markupMode === "percent" ? "+" + state.config.markupValue + "%" : "+" + formatRupiah(state.config.markupValue)}`);
+        });
+      });
+
+      document.getElementById("btnResetDefaultConfig").addEventListener("click", () => {
+        state.config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        state.config.markupValue = 0;
+        saveConfigToStorage();
+        renderHeaderAndHero();
+        renderSettingsForm();
+        renderCatalogGrid();
+        renderPricingTable();
+        renderCartUI();
+        showToast("Pengaturan dikembalikan ke harga modal MTStore");
+      });
+
+      document.getElementById("btnCopyShareLink").addEventListener("click", () => {
+        copyTextToClipboard(buildShareableBuyerUrl(), "Link Toko Pembeli berhasil disalin!");
+      });
+
+      document.getElementById("btnCopyBroadcastText").addEventListener("click", () => {
+        copyTextToClipboard(buildBroadcastPriceListText(), "Teks promosi WhatsApp berhasil disalin!");
+      });
+
+      // Pricing Table Search & Reset
+      document.getElementById("searchPricingTableInput").addEventListener("input", (e) => {
+        state.pricingSearchQuery = e.target.value;
+        renderPricingTable();
+      });
+
+      document.getElementById("btnClearCustomPrices").addEventListener("click", () => {
+        state.config.customPrices = {};
+        saveConfigToStorage();
+        renderPricingTable();
+        renderCatalogGrid();
+        renderSettingsForm();
+        renderCartUI();
+        showToast("Semua harga kustom direset ke markup global");
+      });
+
+      // Cart Modal & Checkout
+      document.getElementById("btnOpenCart").addEventListener("click", openCartModal);
+      document.getElementById("btnFloatingOpenCart").addEventListener("click", openCartModal);
+      document.getElementById("btnCloseCartModal").addEventListener("click", closeCartModal);
+      document.getElementById("cartModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "cartModalBackdrop") closeCartModal();
+      });
+
+      document.getElementById("inputBuyerName").addEventListener("input", renderCartUI);
+      document.getElementById("inputBuyerNote").addEventListener("input", renderCartUI);
+
+      document.getElementById("btnClearCart").addEventListener("click", () => {
+        state.cart = [];
+        renderCartUI();
+        showToast("Invoice dikosongkan");
+      });
+
+      document.getElementById("btnCopyInvoiceText").addEventListener("click", () => {
+        if (state.cart.length === 0) {
+          showToast("Pilih paket aplikasi terlebih dahulu");
+          return;
+        }
+        copyTextToClipboard(buildWhatsAppInvoiceText(), "Format pesanan berhasil disalin!");
+      });
+
+      document.getElementById("btnCheckoutWhatsApp").addEventListener("click", () => {
+        if (state.cart.length === 0) {
+          showToast("Pilih minimal 1 paket aplikasi dulu ya!");
+          return;
+        }
+        const wa = normalizeWaNumber(state.config.waNumber);
+        const msg = encodeURIComponent(buildWhatsAppInvoiceText());
+        window.open(`https://wa.me/${wa}?text=${msg}`, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    // Boot Application
+    loadConfigFromUrlOrStorage();
+    bindAllEvents();
+    renderHeaderAndHero();
+    renderTabs();
+    renderCategoryPills();
+    renderCatalogGrid();
+    renderSettingsForm();
+    renderPricingTable();
+    renderCartUI();
+  </script>
+</body>
+</html>
